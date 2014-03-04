@@ -57,8 +57,9 @@ class Neuron(object):
             self._method = 'euler'
             self._step = self._step_euler
         else:
-            raise myerror.Error('Wrong string provided as an integration method.',
-                              integration_method)
+            raise myerror.Error(
+                'Wrong string provided as an integration method.',
+                integration_method)
 
     def ___set_integration_method(self, integration_method):
         self.__set_integration_method(integration_method)
@@ -96,7 +97,7 @@ class Neuron(object):
         self.tau_ref_force = 2.5
 
     def flush(self):
-        """Flushes saved data of a neuron.
+        """Flushes saved data from a neuron.
 
         Sets time to 0., flushes spike array. Prints a message if verbose.
         """
@@ -188,7 +189,7 @@ class Neuron(object):
         return self._an(V) * (1 - self.n) - self._bn(V) * self.n
     
     # V
-    def _V_right_side(self, I=0., V=None):
+    def _V_right_side(self, I, V=None):
         if V is None:
             V = self.V
         return (I - self.g_Na*self.m**3*self.h*(V - self.V_rest - self.E_Na)
@@ -211,29 +212,29 @@ class Neuron(object):
         n = self.n + self.dt * self._n_right_side()
         h = self.h + self.dt * self._h_right_side()
         m = self.m + self.dt * self._m_right_side()
-        V = self.V + self.dt * self._V_right_side(I=I)
+        V = self.V + self.dt * self._V_right_side(I)
         [self.n, self.h, self.m, self.V] = [n, h, m, V]
 
     def _step_runge_kutta4(self, I):
         k1_n = self._n_right_side()
         k1_h = self._h_right_side()
         k1_m = self._m_right_side()
-        k1_V = self._V_right_side(I=I)
+        k1_V = self._V_right_side(I)
 
         k2_n = self._n_right_side(V=self.V + self.dt * k1_V / 2.)
         k2_m = self._m_right_side(V=self.V + self.dt * k1_V / 2.)
         k2_h = self._h_right_side(V=self.V + self.dt * k1_V / 2.)
-        k2_V = self._V_right_side(I=I, V=self.V + self.dt * k1_V / 2.)
+        k2_V = self._V_right_side(I, V=self.V + self.dt * k1_V / 2.)
 
         k3_n = self._n_right_side(V=self.V + self.dt * k2_V / 2.)
         k3_h = self._h_right_side(V=self.V + self.dt * k2_V / 2.)
         k3_m = self._m_right_side(V=self.V + self.dt * k2_V / 2.)
-        k3_V = self._V_right_side(I=I, V=self.V + self.dt * k2_V / 2.)
+        k3_V = self._V_right_side(I, V=self.V + self.dt * k2_V / 2.)
 
         k4_n = self._n_right_side(V=self.V + self.dt * k3_V)
         k4_h = self._h_right_side(V=self.V + self.dt * k3_V)
         k4_m = self._m_right_side(V=self.V + self.dt * k3_V)
-        k4_V = self._V_right_side(I=I, V=self.V + self.dt * k3_V)
+        k4_V = self._V_right_side(I, V=self.V + self.dt * k3_V)
 
         n = self.n + self.dt / 6. * (k1_n + 2.*k2_n + 2.*k3_n + k4_n)
         h = self.h + self.dt / 6. * (k1_h + 2.*k2_h + 2.*k3_h + k4_h)
@@ -246,7 +247,7 @@ class Neuron(object):
         if self.time >= self.spikes[-1] + self.tau_ref_force:
             self.integration_method = self.integration_method
 
-    def step(self, I=0.0):
+    def step(self, I=0.):
         """Propagates neuron dynamics forward for dt.
 
         Args:
@@ -266,8 +267,10 @@ class Neuron(object):
         """Forces neuron to spike. Use with caution.
 
         Saves spike and forces neuron to ignore everything for tau_ref_force
-        period. Neuron is also reset().
+        period. Neuron is also reset(). Prints a message if verbose.
         """
         self.spikes.append(self.time)
         self._step = self._step_forced_spike
         self.reset()
+        if self.verbose:
+            print 'At', self.time, 'hh neuron spiked.'
