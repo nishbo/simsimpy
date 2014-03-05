@@ -1,6 +1,7 @@
 import math
 import myerror
 
+
 class Neuron(object):
     """Basic three-channel Hodgkin-Huxley neuron.
 
@@ -11,18 +12,18 @@ class Neuron(object):
     Instance of the class can step with euler or runge-kutta4 method.
 
     Attributes:
-        verbose: A boolean indicating if the neuron will print information about
-          itself sometimes, e.g. when reset() or spike occur.
+        verbose: A boolean indicating if the neuron will print information
+          about itself sometimes, e.g. when reset() or spike occur.
         dt: Length of time step, shen using step() method, ms.
         I_stim: Constant current that is presented to a neuron, muA/cm^2.
-        integration_method: String that defines used integration method. Now has
-          two possible states: 'euler' and 'rk4'. If wrongly set, raises an
+        integration_method: String that defines used integration method. Now
+          has two possible states: 'euler' and 'rk4'. If wrongly set, raises an
           myerror.Error exception, method does not change.
         g_Na, g_K, g_L: Maximum conductance of Na, K and leakage channels,
           mS/cm^2.
         E_Na, E_K, E_L: Nernst potentials of Na, K and leakage channels, mV.
-          Relative to neuron resting potential from paper. Auto-ajust for custom
-          set V_rest.
+          Relative to neuron resting potential from paper. Auto-ajust for
+          custom set V_rest.
         C_m: Specific membrane capacity of a neuron, muF/cm^2.
         V_rest: Resting potential of a neuron, mV.
         V_th: Threshold potential for spike, mV. When potential crosses this
@@ -49,34 +50,25 @@ class Neuron(object):
         self.reset()
         self.integration_method = 'rk4'
 
-    def __set_integration_method(self, integration_method):
-        if integration_method == 'rk4':
-            self._method = 'rk4'
-            self._step = self._step_runge_kutta4
-        elif integration_method == 'euler':
-            self._method = 'euler'
-            self._step = self._step_euler
-        else:
-            raise myerror.Error(
-                'Wrong string provided as an integration method.',
-                integration_method)
+    def integration_method():
+        doc = "Integration method of a neuron."
 
-    def ___set_integration_method(self, integration_method):
-        self.__set_integration_method(integration_method)
+        def fget(self):
+            return self._integration_method
 
-    def __get_integration_method(self):
-        return self._method
-
-    def ___get_integration_method(self):
-        return self.__get_integration_method()
-
-    integration_method = property(
-        ___get_integration_method, ___set_integration_method,
-        doc="""Gets or sets integration method of a neuron.
-        Accepted values: 'euler', 'rk4'.
-        Raises:
-            myerror.Error: Error occured trying to use string provided.
-        """)
+        def fset(self, value):
+            if value == 'rk4':
+                self._integration_method = 'rk4'
+                self._step = self._step_runge_kutta4
+            elif value == 'euler':
+                self._integration_method = 'euler'
+                self._step = self._step_euler
+            else:
+                raise myerror.Error(
+                    'Wrong string provided as an integration method.',
+                    value)
+        return locals()
+    integration_method = property(**integration_method())
 
     def set_default_constants(self):
         """Sets default constants that are used in simulation of a neuron.
@@ -85,11 +77,11 @@ class Neuron(object):
         on __init__(self).
         """
         self.g_Na = 120.
-        self.E_Na = 115. 
+        self.E_Na = 115.
         self.g_K = 36.
-        self.E_K = -12. 
+        self.E_K = -12.
         self.g_L = 0.3
-        self.E_L = 10.6 
+        self.E_L = 10.6
         self.C_m = 1.
         self.V_rest = -70.
         self.V_th = 0.
@@ -109,7 +101,7 @@ class Neuron(object):
     def reset(self):
         """Resets changable variables for the neuron.
 
-        Sets V to resting value, gating variables too. Prints a message if 
+        Sets V to resting value, gating variables too. Prints a message if
         verbose.
         """
         self.V = self.V_rest
@@ -133,7 +125,7 @@ class Neuron(object):
         if V - self.V_rest == 25.:
             return 1.
         else:
-            return (0.1  * (25. - (V - self.V_rest)) 
+            return (0.1 * (25. - (V - self.V_rest))
                     / (math.exp((25. - (V - self.V_rest)) / 10.) - 1.))
 
     def _bm(self, V=None):
@@ -173,8 +165,8 @@ class Neuron(object):
         if V - self.V_rest == 10.:
             return 0.1
         else:
-            return (0.01 * (10. - (V - self.V_rest)) 
-                / (math.exp((10. - (V - self.V_rest)) / 10.) - 1.))
+            return (0.01 * (10. - (V - self.V_rest))
+                    / (math.exp((10. - (V - self.V_rest)) / 10.) - 1.))
 
     def _bn(self, V=None):
         if V is None:
@@ -187,21 +179,21 @@ class Neuron(object):
 
     def _n_right_side(self, V=None):
         return self._an(V) * (1 - self.n) - self._bn(V) * self.n
-    
+
     # V
     def _V_right_side(self, I, V=None):
         if V is None:
             V = self.V
         return (I - self.g_Na*self.m**3*self.h*(V - self.V_rest - self.E_Na)
                   - self.g_K *self.n**4*       (V - self.V_rest - self.E_K)
-                  - self.g_L *                 (V - self.V_rest - self.E_L) 
+                  - self.g_L *                 (V - self.V_rest - self.E_L)
                 ) / self.C_m
 
     # Spiking
     def _spiking_test(self):
-        if not self._already_spiking and self.V >= self.V_th :
+        if not self._already_spiking and self.V >= self.V_th:
             self._already_spiking = True
-        elif   self._already_spiking and self.V <  self.V_th_end:
+        elif self._already_spiking and self.V < self.V_th_end:
             self._already_spiking = False
             self.spikes.append(self.time)
             if self.verbose:
@@ -251,8 +243,8 @@ class Neuron(object):
         """Propagates neuron dynamics forward for dt.
 
         Args:
-            I: Optional variable, muA/cm^2. Adds some incoming current to I_stim
-            for the step.
+            I: Optional variable, muA/cm^2. Adds some incoming current to
+              I_stim for the step.
 
         Returns:
             Boolean True if neuron spiked, False if did not.

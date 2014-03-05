@@ -1,6 +1,7 @@
 import math
 import random
 
+
 class Synapse(object):
     """Tsodyks-Markram short-term synaptic plasticity.
 
@@ -17,11 +18,13 @@ class Synapse(object):
         self.set_excitatory()
         self.shuffle_constants()
         self.reset()
-        
+
     def U():
         doc = "U model variable. From 0 to 1."
+
         def fget(self):
             return self._U
+
         def fset(self, value):
             self._U = (value if value < 1. else 1.) if value > 0. else 0.
         return locals()
@@ -29,8 +32,10 @@ class Synapse(object):
 
     def u():
         doc = "u model variable. From 0 to 1. Always eq to U in the beginning."
+
         def fget(self):
             return self._u
+
         def fset(self, value):
             self._u = (value if value < 1. else 1.) if value > 0. else 0.
         return locals()
@@ -79,8 +84,9 @@ class Synapse(object):
             Weight of this synapse. u*r.
         """
         h = time - self.last_presynaptic_spike
-        [self.u, self.r] = [ self.U + self.u*(1. - self.U)*math.exp(-h/self.F), 
-                    1. + (self.r - self.u*self.r - 1.)*math.exp(-h/self.D) ]
+        [self.u, self.r] = [
+            self.U + self.u*(1. - self.U)*math.exp(-h/self.F),
+            1. + (self.r - self.u*self.r - 1.)*math.exp(-h/self.D)]
         self.last_presynaptic_spike = time
         return self.u*self.r
 

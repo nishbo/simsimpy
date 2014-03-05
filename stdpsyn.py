@@ -1,5 +1,6 @@
 import math
 
+
 class Synapse(object):
     """STDP synapse plasticity.
 
@@ -58,9 +59,9 @@ class Synapse(object):
         self.last_presynaptic_spike = time
         if self.w_minus > 0.:
             h = self.last_postsynaptic_spike - self.last_presynaptic_spike
-            if -self.working_time_window[1] <= h<= -self.working_time_window[0]:
+            if -self.working_time_window[1] <=h<= -self.working_time_window[0]:
                 self.weight = max(
-                    self.weight_min, 
+                    self.weight_min,
                     self.weight - self.w_minus * math.exp(h / self.tau_minus))
         return self.exc * self.weight
 
@@ -80,6 +81,6 @@ class Synapse(object):
             h = self.last_postsynaptic_spike - self.last_presynaptic_spike
             if self.working_time_window[0] <= h <= self.working_time_window[1]:
                 self.weight = min(
-                    self.weight_max, 
+                    self.weight_max,
                     self.weight + self.w_plus * math.exp(-h / self.tau_plus))
         return self.exc * self.weight

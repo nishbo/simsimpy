@@ -12,4 +12,4 @@ class Error(Exception):
         self.value = value
 
     def __str__(self):
-        return repr(self.msg + 'Value: ' + str(self.value))
+        return repr('%s Value: %s' % (self.msg, str(self.value)))

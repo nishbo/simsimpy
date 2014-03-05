@@ -7,8 +7,8 @@ class Node(object):
     anything complex.
 
     Attributes:
-        neuron: Neuron model for this node. Has to have attributes: dt, step(I),
-          time, reset().
+        neuron: Neuron model for this node. Has to have attributes: dt,
+          step(I), time, reset().
         synapses: List of incoming synapses (synapse types). Have to have dt,
           step(weight), time, reset().
     """
@@ -26,8 +26,8 @@ class Node(object):
             synapse_weights: List of weights for list of synapses.
 
         Raises:
-            IndexError: An error occurs if list provided is shorter then list of
-              synapses.
+            IndexError: An error occurs if list provided is shorter then list
+              of synapses.
         """
         I = 0.
         for i, synapse in enumerate(self.synapses):

@@ -1,5 +1,6 @@
 import myerror
 
+
 class Neuron(object):
     """Basic leaky integrate-and-fire neuron with no oscillation.
 
@@ -13,12 +14,12 @@ class Neuron(object):
     Instance of the class can step with euler or runge-kutta4 method.
 
     Attributes:
-        verbose: A boolean indicating if the neuron will print information about
-          itself sometimes, e.g. when reset() or spike occur.
+        verbose: A boolean indicating if the neuron will print information
+          about itself sometimes, e.g. when reset() or spike occur.
         dt: Length of time step, shen using step() method, ms.
         I_stim: Constant current that is presented to a neuron, pA.
-        integration_method: String that defines used integration method. Now has
-          two possible states: 'euler' and 'rk4'. If wrongly set, raises an
+        integration_method: String that defines used integration method. Now
+          has two possible states: 'euler' and 'rk4'. If wrongly set, raises an
           myerror.Error exception, method does not change.
         r_m: Neuron membrane resistance, GOhm.
         tau_m: Membrane time constant, ms.
@@ -44,55 +45,54 @@ class Neuron(object):
         self.reset()
         self.integration_method = 'rk4'
 
-    def __set_integration_method(self, integration_method):
-        if integration_method == 'rk4':
-            self._method = 'rk4'
-            self._step = self._step_runge_kutta4
-        elif integration_method == 'euler':
-            self._method = 'euler'
-            self._step = self._step_euler
-        else:
-            raise myerror.Error(
-                'Wrong string provided as an integration method.',
-                integration_method)
+    def integration_method():
+        doc = "Integration method of a neuron."
 
-    def __get_integration_method(self):
-        return self._method
+        def fget(self):
+            return self._integration_method
 
-    integration_method = property(
-        __get_integration_method, __set_integration_method,
-        doc="""Gets or sets integration method of a neuron.
-        Accepted values: 'euler', 'rk4'.
-        Raises:
-            myerror.Error: Error occured trying to use string provided.
-        """)
+        def fset(self, value):
+            if value == 'rk4':
+                self._integration_method = 'rk4'
+                self._step = self._step_runge_kutta4
+            elif value == 'euler':
+                self._integration_method = 'euler'
+                self._step = self._step_euler
+            else:
+                raise myerror.Error(
+                    'Wrong string provided as an integration method.',
+                    value)
+        return locals()
+    integration_method = property(**integration_method())
 
-    def __set_c_m(self, c_m):
-        self._c_m = c_m
-        self._r_m = self.tau_m / c_m
+    def c_m():
+        doc = "Membrane capacity and corrects resistance."
 
-    def __get_c_m(self):
-        return self._c_m
+        def fget(self):
+            return self._c_m
 
-    c_m = property(
-        __get_c_m, __set_c_m,
-        doc="""Gets or sets membrane capacity and corrects resistance.""")
+        def fset(self, value):
+            self._c_m = value
+            self._r_m = self.tau_m / value
+        return locals()
+    c_m = property(**c_m())
 
-    def __set_r_m(self, r_m):
-        self._r_m = r_m
-        self._c_m = self.tau_m / r_m
+    def r_m():
+        doc = "Membrane resistance and corrects capacity."
 
-    def __get_r_m(self):
-        return self._r_m
+        def fget(self):
+            return self._r_m
 
-    r_m = property(
-        __get_r_m, __set_r_m,
-        doc="""Gets or sets membrane resistance and corrects capacity.""")
+        def fset(self, value):
+            self._r_m = value
+            self._c_m = self.tau_m / value
+        return locals()
+    r_m = property(**r_m())
 
     def set_default_constants(self):
         """Sets default constants that are used in simulation of a neuron.
 
-        Sets membrane, potential constants, refractory period. Called on 
+        Sets membrane, potential constants, refractory period. Called on
         __init__(self). Membrane capacity is not used: R_m * C_m = tau_m.
         """
         self.tau_m = 30.
@@ -126,6 +126,7 @@ class Neuron(object):
     def name(self):
         """Returns some string to define class of neuron."""
         return 'liafneu'
+
     # V
     def _V_right_side(self, I, V=None):
         if V is None:
