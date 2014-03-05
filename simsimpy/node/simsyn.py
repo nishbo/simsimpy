@@ -1,7 +1,7 @@
 import myerror
 
 
-class Synapse(object):
+class SimpleSynapse(object):
     """Simple conductance-based synapse.
 
     Defines only the curve of spikes. No plasticity included. Equations:
@@ -22,6 +22,7 @@ class Synapse(object):
     def __init__(self, tau=[3., 0.]):
         """Inits conductance-based synapse with default attributes."""
         self.verbose = False
+        self._tau = [0., 0.]
         self.tau = tau
         self.reset()
         self.dt = 0.01

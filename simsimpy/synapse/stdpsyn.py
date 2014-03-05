@@ -1,7 +1,7 @@
 import math
 
 
-class Synapse(object):
+class STDP(object):
     """STDP synapse plasticity.
 
     Represents a STDP Hebbian 'learning' rule.

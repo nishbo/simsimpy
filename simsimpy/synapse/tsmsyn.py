@@ -2,7 +2,7 @@ import math
 import random
 
 
-class Synapse(object):
+class TM(object):
     """Tsodyks-Markram short-term synaptic plasticity.
 
     As described in Maass, W., & Markram, H. (2002). Synapses as dynamic memory

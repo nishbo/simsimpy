@@ -2,7 +2,7 @@ import math
 import myerror
 
 
-class Neuron(object):
+class HH(object):
     """Basic three-channel Hodgkin-Huxley neuron.
 
     Class represents a basic Hodgkin-Huxley neuron as described in the original

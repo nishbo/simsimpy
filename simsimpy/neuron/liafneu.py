@@ -1,7 +1,7 @@
 import myerror
 
 
-class Neuron(object):
+class LIAF(object):
     """Basic leaky integrate-and-fire neuron with no oscillation.
 
     Class represents a basic leaky integrate-and-fire neuron. Dypamics:
