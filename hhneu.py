@@ -1,4 +1,4 @@
-import pylab
+import math
 import myerror
 
 class Neuron(object):
@@ -134,12 +134,12 @@ class Neuron(object):
             return 1.
         else:
             return (0.1  * (25. - (V - self.V_rest)) 
-                    / (pylab.exp((25. - (V - self.V_rest)) / 10.) - 1.))
+                    / (math.exp((25. - (V - self.V_rest)) / 10.) - 1.))
 
     def _bm(self, V=None):
         if V is None:
             V = self.V
-        return 4. * pylab.exp(-(V - self.V_rest) / 18.)
+        return 4. * math.exp(-(V - self.V_rest) / 18.)
 
     def m_inf(self, V=None):
         """Returns resting value for m gating variable with given potential."""
@@ -152,12 +152,12 @@ class Neuron(object):
     def _ah(self, V=None):
         if V is None:
             V = self.V
-        return 0.07 * pylab.exp(-(V - self.V_rest) / 20.)
+        return 0.07 * math.exp(-(V - self.V_rest) / 20.)
 
     def _bh(self, V=None):
         if V is None:
             V = self.V
-        return 1. / (pylab.exp((30. - (V - self.V_rest)) / 10.) + 1.)
+        return 1. / (math.exp((30. - (V - self.V_rest)) / 10.) + 1.)
 
     def h_inf(self, V=None):
         """Returns resting value for h gating variable with given potential."""
@@ -174,12 +174,12 @@ class Neuron(object):
             return 0.1
         else:
             return (0.01 * (10. - (V - self.V_rest)) 
-                / (pylab.exp((10. - (V - self.V_rest)) / 10.) - 1.))
+                / (math.exp((10. - (V - self.V_rest)) / 10.) - 1.))
 
     def _bn(self, V=None):
         if V is None:
             V = self.V
-        return 0.125 * pylab.exp(-(V - self.V_rest) / 80.)
+        return 0.125 * math.exp(-(V - self.V_rest) / 80.)
 
     def n_inf(self, V=None):
         """Returns resting value for n gating variable with given potential."""

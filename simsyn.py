@@ -16,7 +16,6 @@ class Synapse(object):
         tau: List of two time constants for the synapse type, ms.
         g: g=[g, dg/dt]. List of current conductance and additional state
           variable (derivative).
-
     """
 
     def __init__(self, tau=[3., 0.]):
