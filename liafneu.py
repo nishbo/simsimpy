@@ -100,7 +100,7 @@ class Neuron(object):
         self.tau_ref = 3.
         self.V_rest = 0.
         self.V_reset = 14.2
-        self.V_th = 15.
+        self.V_th = 15.03
 
     def flush(self):
         """Flushes saved data from a neuron.

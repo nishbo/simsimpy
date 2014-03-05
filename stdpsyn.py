@@ -1,7 +1,7 @@
 import math
 
-class STDPSynapse(object):
-    """Simple STDP synapse plasticity.
+class Synapse(object):
+    """STDP synapse plasticity.
 
     Represents a STDP Hebbian 'learning' rule.
     h = last_postsynaptic_spike - last_presynaptic_spike
