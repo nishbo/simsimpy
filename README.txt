@@ -21,4 +21,4 @@ Contains Node and SimpleSynapse classes. Defines a basic node of network.
 Contains various models of synaptic plasticity. Short-term Tsodyks-Markram and
 long-term STDP are included.
 
-For more information use help.
+For more information use help. For example of usage see example.py script.
