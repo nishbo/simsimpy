@@ -2,7 +2,8 @@ import myerror
 
 
 class SimpleSynapse(object):
-    """Simple conductance-based synapse.
+    """Simple synapse that can work as both current-based and conductance-based
+    synapse.
 
     Defines only the curve of spikes. No plasticity included. Equations:
     tau = [tau[0], tau[1]]
@@ -17,15 +18,20 @@ class SimpleSynapse(object):
         tau: List of two time constants for the synapse type, ms.
         g: g=[g, dg/dt]. List of current conductance and additional state
           variable (derivative).
+        base: Indicates which type is the synapse, current or conductance.
+          Second value represents multiplicator (for inhibitory or excitatory
+          synapses) and Nernst potential for current- and conductance-based
+          synapse respectively.
     """
 
-    def __init__(self, tau=[3., 0.]):
+    def __init__(self, tau=[3., 0.], base=['current', 1.]):
         """Inits conductance-based synapse with default attributes."""
         self.verbose = False
         self._tau = [0., 0.]
         self.tau = tau
         self.reset()
         self.dt = 0.01
+        self.base = base
 
     def reset(self):
         """Resets changable variables for the synapse.
@@ -61,6 +67,22 @@ class SimpleSynapse(object):
                     value)
         return locals()
     tau = property(**tau())
+
+    def base():
+        doc = "conductance or current base."
+
+        def fget(self):
+            return self._base
+
+        def fset(self, value):
+            if value[0] == 'current' or value[0] == 'conductance':
+                self._base = value
+            else:
+                raise myerror.Error('Wrong base of synapse.'
+                                    ' Use \'conductance\' or \'current\'.',
+                                    value)
+        return locals()
+    base = property(**base())
 
     def _step_one_time(self, weight):
         self.g[0] += weight

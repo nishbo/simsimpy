@@ -98,6 +98,11 @@ class HH(object):
         if self.verbose:
             print 'Neuron was flushed.'
 
+    def set_gating_variables(self):
+        self.m = self.m_inf()
+        self.h = self.h_inf()
+        self.n = self.n_inf()
+
     def reset(self):
         """Resets changable variables for the neuron.
 
@@ -105,9 +110,7 @@ class HH(object):
         verbose.
         """
         self.V = self.V_rest
-        self.m = self.m_inf()
-        self.h = self.h_inf()
-        self.n = self.n_inf()
+        self.set_gating_variables()
         self._already_spiking = False
 
         if self.verbose:

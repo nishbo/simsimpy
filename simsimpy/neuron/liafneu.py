@@ -166,7 +166,7 @@ class LIAF(object):
 
         Prints a message if verbose.
         """
-        self.reset()
+        self.V = self.V_reset
         self.spikes.append(self.time)
         self.spike_time = self.time
         if self.verbose:

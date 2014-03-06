@@ -22,7 +22,6 @@ class STDP(object):
         tau_plus, tau_minus: Defines length of effect of spike on synapse.
         w_plus, w_minus: How much synapse changes with spike.
         working_time_window: Time window, where STDP has effect.
-        exc: Multiplier of output. Change for excitatory/inhibitory synapses.
         last_presynaptic_spike, last_postsynaptic_spike: Read names of
           attributes again.
     """
@@ -37,7 +36,6 @@ class STDP(object):
         self.w_plus = 0.3
         self.w_minus = 0.3105
         self.working_time_window = [2., 60.]
-        self.exc = 1.
         self.reset()
 
     def reset(self):
@@ -52,9 +50,7 @@ class STDP(object):
             time: Time of the arriving of spike to the synapse.
 
         Returns:
-            Weight of the synapse after processing multiplied by its
-            excitatory/inhibitory value. E.g. -32.2 for inhibitory synapse with
-            weight of 32.2.
+            Weight of the synapse.
         """
         self.last_presynaptic_spike = time
         if self.w_minus > 0.:
@@ -63,7 +59,7 @@ class STDP(object):
                 self.weight = max(
                     self.weight_min,
                     self.weight - self.w_minus * math.exp(h / self.tau_minus))
-        return self.exc * self.weight
+        return self.weight
 
     def postsynaptic_spike(self, time):
         """Processes postsynaptic spike.
@@ -72,9 +68,7 @@ class STDP(object):
             time: Time of the excitation of postsynaptic neuron.
 
         Returns:
-            Weight of the synapse after processing multiplied by its
-            excitatory/inhibitory value. E.g. -32.2 for inhibitory synapse with
-            weight of 32.2.
+            Weight of the synapse.
         """
         self.last_postsynaptic_spike = time
         if self.w_plus > 0.:
@@ -83,4 +77,4 @@ class STDP(object):
                 self.weight = min(
                     self.weight_max,
                     self.weight + self.w_plus * math.exp(-h / self.tau_plus))
-        return self.exc * self.weight
+        return self.weight
