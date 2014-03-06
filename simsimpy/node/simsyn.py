@@ -70,8 +70,8 @@ class SimpleSynapse(object):
     def _step_two_times(self, weight):
         self.g[1] += weight
         self.g = [self.g[0] + self.g[1] * self.dt,
-                  self.g[1] - ((self.tau[0] + self.tau[2])*self.g[1]
-                  + self.g[0]) / (self.tau[0] * self.tau[2]) * self.dt]
+                  self.g[1] - ((self.tau[0] + self.tau[1])*self.g[1]
+                  + self.g[0]) / (self.tau[0] * self.tau[1]) * self.dt]
         return self.g[0]
 
     def step(self, weight):
