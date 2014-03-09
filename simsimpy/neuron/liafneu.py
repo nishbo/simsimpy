@@ -105,21 +105,21 @@ class LIAF(object):
     def flush(self):
         """Flushes saved data from a neuron.
 
-        Sets time to 0., flushes spike array, sets spike time to low value.
-        Prints a message if verbose.
+        Flushes spike array. Prints a message if verbose.
         """
-        self.time = 0.
         self.spikes = []
-        self.spike_time = - 2. * self.tau_ref - 1.
         if self.verbose:
             print 'Neuron was flushed.'
 
     def reset(self):
         """Resets changable variables for the neuron.
 
-        Sets V to resting value. Prints a message if verbose.
+        Sets time to 0., sets spike time to low value. Sets V to resting value.
+        Prints a message if verbose.
         """
         self.V = self.V_rest
+        self.time = 0.
+        self.spike_time = - 2. * self.tau_ref - 1.
         if self.verbose:
             print 'Neuron was reset.'
 

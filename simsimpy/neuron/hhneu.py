@@ -91,9 +91,8 @@ class HH(object):
     def flush(self):
         """Flushes saved data from a neuron.
 
-        Sets time to 0., flushes spike array. Prints a message if verbose.
+        Flushes spike array. Prints a message if verbose.
         """
-        self.time = 0.
         self.spikes = []
         if self.verbose:
             print 'Neuron was flushed.'
@@ -106,9 +105,10 @@ class HH(object):
     def reset(self):
         """Resets changable variables for the neuron.
 
-        Sets V to resting value, gating variables too. Prints a message if
-        verbose.
+        Sets time to 0., sets V to resting value, gating variables too.
+        Prints a message if verbose.
         """
+        self.time = 0.
         self.V = self.V_rest
         self.set_gating_variables()
         self._already_spiking = False
@@ -266,6 +266,8 @@ class HH(object):
         """
         self.spikes.append(self.time)
         self._step = self._step_forced_spike
-        self.reset()
+        self.V = self.V_rest
+        self.set_gating_variables()
+        self._already_spiking = False
         if self.verbose:
             print 'At', self.time, 'hh neuron spiked.'
