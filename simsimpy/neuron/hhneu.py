@@ -241,6 +241,7 @@ class HH(object):
     def _step_forced_spike(self, I):
         if self.time >= self.spikes[-1] + self.tau_ref_force:
             self.integration_method = self.integration_method
+            self._already_spiking = False
 
     def step(self, I=0.):
         """Propagates neuron dynamics forward for dt.
@@ -258,6 +259,10 @@ class HH(object):
 
         return bool(len(self.spikes)) and self.time == self.spikes[-1]
 
+    def spiking(self):
+        """Returns True if neuron is spiking now."""
+        return self._already_spiking
+
     def force_spike(self):
         """Forces neuron to spike. Use with caution.
 
@@ -268,6 +273,6 @@ class HH(object):
         self._step = self._step_forced_spike
         self.V = self.V_rest
         self.set_gating_variables()
-        self._already_spiking = False
+        self._already_spiking = True
         if self.verbose:
             print 'At', self.time, 'hh neuron spiked.'

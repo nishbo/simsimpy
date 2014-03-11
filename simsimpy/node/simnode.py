@@ -142,3 +142,15 @@ class Node(object):
             return [i for i in self._I_syn]
         return locals()
     I_syn = property(**I_syn())
+
+    def spiking(self):
+        """Calls neuron function spiking(self)."""
+        return neuron.spiking()
+
+    def force_spike(self):
+        """Calls neuron function force_spike(self)."""
+        return neuron.force_spike()
+
+    def flush(self):
+        """Calls neuron function flush(self)."""
+        return neuron.flush()

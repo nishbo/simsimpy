@@ -155,11 +155,15 @@ class LIAF(object):
             Boolean True if neuron spiked, False if did not.
         """
         self.time += self.dt
-        if self.spike_time + self.tau_ref <= self.time:
+        if not self.spiking():
             self._step(I + self.I_stim)
             if self.V >= self.V_th:
                 self.force_spike()
         return self.time == self.spike_time
+
+    def spiking(self):
+        """Returns True if neuron is in refractory period."""
+        return not self.time >= self.spike_time + self.tau_ref
 
     def force_spike(self):
         """Forces neuron to spike and stay refractory for the period.
