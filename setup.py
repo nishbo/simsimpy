@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 readme = open('README.txt').read()
 setup(name='simsimpy',
-      version='0.1.6',
+      version='0.1.7',
       description='Simple simulator of biological neural networks.',
       long_description=readme,
       url='https://github.com/nishbo/simsimpy',

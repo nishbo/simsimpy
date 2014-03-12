@@ -4,14 +4,18 @@ class Node(object):
     Node is a basis of network. In this simulator a node will be a neuron with
     incoming simple synapses that define incoming current. Node provides a
     simple interface for a neuron and its incoming synapses. Does not add
-    anything complex. Enables simultaneous access and set for:
+    anything complex. Enables get and/or set and/or call for:
         dt
         time
         reset()
-        g
-        V
-        spikes
-    as properties.
+        I_syn - complete synaptic current
+        synapse.g[0]
+        neuron.V
+        neuron.spikes
+        neuron.I_stim
+        neuron.spiking()
+        neuron.force_spike()
+        neuron.flush()
 
     Attributes:
         neuron: Neuron model for this node. Has to have attributes: dt,

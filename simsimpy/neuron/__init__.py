@@ -5,6 +5,9 @@ methods and varibles:
     self.verbose
     self.I_stim
     self.dt
+    self.V
+    self.spikes
+    self.time
     self.integration_method
     step(self)
     set_default_constants(self)
@@ -13,6 +16,7 @@ methods and varibles:
     name(self)
     step(self, I=)
     force_spike(self)
+    spiking(self)
 For description see help of models.
 """
 
