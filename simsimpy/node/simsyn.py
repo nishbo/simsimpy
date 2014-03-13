@@ -66,19 +66,19 @@ class SimpleSynapse(object):
                 if value[0] == value[1]:
                     self._tau[0] = value[0]
                     self._tau[1] = value[1]
-                    self.step = self._step_alpha
+                    self.step = self._step_alpha_rk4
                 else:
                     self._tau[0] = value[0]
                     self._tau[1] = value[1]
-                    self.step = self._step_double_exponential
+                    self.step = self._step_double_exponential_rk4
             elif value[0] > 0.:
                 self._tau[0] = value[0]
                 self._tau[1] = 0.
-                self.step = self._step_exponential
+                self.step = self._step_exponential_rk4
             elif value[1] > 0.:
                 self._tau[0] = value[1]
                 self._tau[1] = 0.
-                self.step = self._step_exponential
+                self.step = self._step_exponential_rk4
             else:
                 raise myerror.Error(
                     'Trying to set wrong time in simple synapse.',
@@ -107,6 +107,18 @@ class SimpleSynapse(object):
         self.g = [self.g[0] - self.dt * self.g[0] / self.tau[0], self.g[1]]
         return self.g[0]
 
+    def _exponential_right_side(self, g):
+        return -g / self.tau[0]
+
+    def _step_exponential_rk4(self, weight):
+        self.g[0] += weight
+        k1_g = self._exponential_right_side(self.g[0])
+        k2_g = self._exponential_right_side(self.g[0] + self.dt * k1_g / 2.)
+        k3_g = self._exponential_right_side(self.g[0] + self.dt * k2_g / 2.)
+        k4_g = self._exponential_right_side(self.g[0] + self.dt * k3_g)
+        self.g[0] += self.dt / 6. * (k1_g + 2.*k2_g + 2.*k3_g + k4_g)
+        return self.g[0]
+
     def _step_alpha(self, weight):
         self.g[1] += weight / math.sqrt(self.tau[0] * self.tau[1])
         self.g = [self.g[0] + self.g[1] * self.dt,
@@ -114,11 +126,55 @@ class SimpleSynapse(object):
                   + self.g[0]) / (self.tau[0] * self.tau[1]) * self.dt]
         return self.g[0]
 
+    def _alpha_right_side(self, g):
+        return [g[1], - (2.*self.tau[0]*g[1] + g[0]) / self.tau[0]**2]
+
+    def _step_alpha_rk4(self, weight):
+        self.g[1] += weight / math.sqrt(self.tau[0] * self.tau[1])
+        k1_g = self._alpha_right_side(self.g)
+        k2_g = self._alpha_right_side([
+            self.g[0] + self.dt * k1_g[0] / 2.,
+            self.g[1] + self.dt * k1_g[1] / 2.])
+        k3_g = self._alpha_right_side([
+            self.g[0] + self.dt * k2_g[0] / 2.,
+            self.g[1] + self.dt * k2_g[1] / 2.])
+        k4_g = self._alpha_right_side([
+            self.g[0] + self.dt * k3_g[0],
+            self.g[1] + self.dt * k3_g[1]])
+        self.g[0] += self.dt / 6. * (
+            k1_g[0] + 2.*k2_g[0] + 2.*k3_g[0] + k4_g[0])
+        self.g[1] += self.dt / 6. * (
+            k1_g[1] + 2.*k2_g[1] + 2.*k3_g[1] + k4_g[1])
+        return self.g[0]
+
     def _step_double_exponential(self, weight):
         self.g[1] += weight
         self.g = [self.g[0] + self.g[1] * self.dt,
                   self.g[1] - ((self.tau[0] + self.tau[1])*self.g[1]
                   + self.g[0]) / (self.tau[0] * self.tau[1]) * self.dt]
+        return self.g[0]
+
+    def _double_exponential_right_side(self, g):
+        return [self.g[1],
+                - ((self.tau[0] + self.tau[1])*g[1]
+                + g[0]) / (self.tau[0] * self.tau[1])]
+
+    def _step_double_exponential_rk4(self, weight):
+        self.g[1] += weight
+        k1_g = self._double_exponential_right_side(self.g)
+        k2_g = self._double_exponential_right_side([
+            self.g[0] + self.dt * k1_g[0] / 2.,
+            self.g[1] + self.dt * k1_g[1] / 2.])
+        k3_g = self._double_exponential_right_side([
+            self.g[0] + self.dt * k2_g[0] / 2.,
+            self.g[1] + self.dt * k2_g[1] / 2.])
+        k4_g = self._double_exponential_right_side([
+            self.g[0] + self.dt * k3_g[0],
+            self.g[1] + self.dt * k3_g[1]])
+        self.g[0] += self.dt / 6. * (
+            k1_g[0] + 2.*k2_g[0] + 2.*k3_g[0] + k4_g[0])
+        self.g[1] += self.dt / 6. * (
+            k1_g[1] + 2.*k2_g[1] + 2.*k3_g[1] + k4_g[1])
         return self.g[0]
 
     def step(self, weight):
