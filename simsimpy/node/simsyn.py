@@ -1,4 +1,5 @@
 import myerror
+import math
 
 
 class SimpleSynapse(object):
@@ -10,6 +11,14 @@ class SimpleSynapse(object):
         tau[0] * tau[1] * g'' + (tau[0] + tau[1]) * g' + g =
           sum_i(weight_i(t) * sum_j(delta(spike_i^j)))
     (sum of all incoming spikes (j) from synapse (i))
+
+    If tau[0] or tau[1] is 0, following equation is computed (weight is the
+    input for the function):
+        tau * g' = -g + weight(t)
+    If both are present, weight is added the following way:
+        g' += weight / sqrt(tau[0]*tau[1])
+    To be compatible with alpha-function (tau[0]=tau[1]):
+        g = weight * t/tau * exp(-t/tau)
 
     Attributes:
         verbose: A boolean indicating if the neuron will print information
@@ -90,7 +99,7 @@ class SimpleSynapse(object):
         return self.g[0]
 
     def _step_two_times(self, weight):
-        self.g[1] += weight
+        self.g[1] += weight / math.sqrt(self.tau[0] * self.tau[1])
         self.g = [self.g[0] + self.g[1] * self.dt,
                   self.g[1] - ((self.tau[0] + self.tau[1])*self.g[1]
                   + self.g[0]) / (self.tau[0] * self.tau[1]) * self.dt]
