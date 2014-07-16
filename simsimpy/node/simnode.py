@@ -144,8 +144,26 @@ class Node(object):
 
         def fget(self):
             return [i for i in self._I_syn]
+
+        def fset(self, value):
+            if value == 0.:
+                for i in xrange(len(self._I_syn)):
+                    self._I_syn[i] = 0.
         return locals()
     I_syn = property(**I_syn())
+
+    def I():
+        doc = "Total current."
+
+        def fget(self):
+            return sum(self.I_syn) + self.I_stim
+
+        def fset(self, value):
+            if value == 0.:
+                self.I_stim = 0.
+                self.I_syn = 0.
+        return locals()
+    I = property(**I())
 
     def spiking(self):
         """Calls neuron function spiking(self)."""
