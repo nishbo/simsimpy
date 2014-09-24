@@ -66,6 +66,8 @@ class STDP(object):
             elif value == 2:
                 self.presynaptic_spike = self._presynaptic_spike_2
                 self.postsynaptic_spike = self._postsynaptic_spike_2
+                self._spike_pairing_2_can_pre = True
+                self._spike_pairing_2_can_post = True
             else:
                 raise ValueError("Wrong spike pairing type.")
             self._spike_pairing = value
