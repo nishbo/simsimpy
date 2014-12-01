@@ -22,6 +22,8 @@ class Node(object):
           step(I), time, reset().
         synapses: List of incoming synapses (synapse types). Have to have dt,
           step(weight), time, reset().
+        flush_current_on_spike: Sets all synaptic currents to zero on neuron
+          spike. Default: False.
     """
 
     def __init__(self, neuron, synapses):
@@ -33,6 +35,7 @@ class Node(object):
         for synapse in synapses:
             self.add_synapse(synapse)
         self.dt = self.neuron.dt
+        self.flush_current_on_spike = False
 
     def add_synapse(self, synapse):
         """Adds an incoming synapse."""
@@ -61,7 +64,12 @@ class Node(object):
         """
         for i, synapse in enumerate(self.synapses):
             self._I_syn[i] = self._synapse_step[i](synapse, synapse_weights[i])
-        return self.neuron.step(sum(self._I_syn))
+        if self.neuron.step(sum(self._I_syn)):
+            if self.flush_current_on_spike:
+                for syn_current in self._I_syn:
+                    syn_current = 0.
+            return True
+        return False
 
     def reset(self):
         self.neuron.reset()
