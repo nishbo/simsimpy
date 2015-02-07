@@ -50,7 +50,7 @@ class Node(object):
         return synapse.step(weight) * synapse.base[1]
 
     def _conductance_synapse_step(self, synapse, weight):
-        return synapse.step(weight) * (synapse.base[1] - self.V) / synapse.base[1]
+        return synapse.step(weight) * (synapse.base[1] - self.V)
 
     def step(self, synapse_weights):
         """Propagates dynamics of neuron and synapses.
