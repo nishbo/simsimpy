@@ -91,7 +91,8 @@ class STDP(object):
         self.last_postsynaptic_spike = time
         if self.w_plus > 0.:
             h = self.last_postsynaptic_spike - self.last_presynaptic_spike
-            if self.working_time_window[0] <= h <= self.working_time_window[1]:
+            if (self.working_time_window[0] <= h
+                    <= self.working_time_window[1]):
                 self.weight = min(
                     self.weight_max,
                     self.weight + self.w_plus * math.exp(-h / self.tau_plus))
@@ -116,7 +117,8 @@ class STDP(object):
         self.last_postsynaptic_spike = time
         if self.w_plus > 0. and self._spike_pairing_2_can_post:
             h = self.last_postsynaptic_spike - self.last_presynaptic_spike
-            if self.working_time_window[0] <= h <= self.working_time_window[1]:
+            if (self.working_time_window[0] <= h
+                    <= self.working_time_window[1]):
                 self.weight = min(
                     self.weight_max,
                     self.weight + self.w_plus * math.exp(-h / self.tau_plus))

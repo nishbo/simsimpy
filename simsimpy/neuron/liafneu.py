@@ -25,12 +25,13 @@ class LIAF(object):
         tau_m: Membrane time constant, ms.
         c_m: Membrane capacity, nF.
         V_rest: Resting potential of a neuron, mV.
+        V_reset: This value is assigned to the neuron during refractory period.
         V_th: Threshold potential for spike, mV. When potential crosses this
         value, neuron spikes.
         V: Current neuron membrane potential, mV.
         time: Current time for the neuron, ms.
         spikes: List of spike times of the neuron. Time of spike is defined by
-        'time' attribute.
+        'self.time' attribute.
         tau_ref: Duration of refractory period of forced spike, ms.
     """
 
