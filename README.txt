@@ -20,5 +20,11 @@ Contains Node and SimpleSynapse classes. Defines a basic node of network.
 3. synapse
 Contains various models of synaptic plasticity. Short-term Tsodyks-Markram and
 long-term STDP are included.
+4. random
+Contains a few functions expanding random number generator capabilities.
+5. other
+A few useful functions.
+6. intstep
+Integration step module.
 
 For more information use help. For example of usage see example.py script.
