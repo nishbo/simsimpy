@@ -27,3 +27,9 @@ def dxrange(start, stop, step=1., rnd=None):
         yield r
         r += step
         r = round(r, rnd)
+
+
+def vesre(x):
+    a = list(x)
+    a[0], a[1:] = a[-1], a[:-1]
+    return a
