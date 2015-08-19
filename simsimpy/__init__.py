@@ -9,3 +9,4 @@ import synapse
 import node
 import random
 from other import *
+from subset import SubsetStorage
