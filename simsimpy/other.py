@@ -54,11 +54,23 @@ def dlogrange(start, step, steps=-1, stop=None):
 
 
 class Bounds(object):
-    def __init__(self, bounds=None):
+    """Creates callable Bounds object from a list of bounds.
+
+    bounds: [[min, max], [min, max], ...]
+    instance of Bounds(x, ...) or Bounds(x_new=x) or Bounds(x=x) checks if x
+        is inside bounds.
+    priority: kwargs x, kwargs x_new, args.
+    """
+    def __init__(self, bounds):
         self.min = numpy.array([bound[0] for bound in bounds])
         self.max = numpy.array([bound[1] for bound in bounds])
 
-    def __call__(self, **kwargs):
-        x = kwargs["x_new"]
+    def __call__(self, *args, **kwargs):
+        if 'x' in kwargs.keys():
+            x = kwargs['x']
+        elif 'x_new' in kwargs.keys():
+            x = kwargs['x_new']
+        else:
+            x = args[0]
         return (bool(numpy.all(x <= self.max)) and
                 bool(numpy.all(x >= self.min)))

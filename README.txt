@@ -9,7 +9,6 @@ Installation:
 1. Download repository.
 2. Open package directory (the one that contains setup.py) in terminal.
 3. Type 'python setup.py install'.
-On OSX and *nix you will probably need to have superuser priveleges (sudo).
 
 Package simsimpy contains following modules:
 1. neuron
@@ -26,5 +25,7 @@ Contains a few functions expanding random number generator capabilities.
 A few useful functions.
 6. intstep
 Integration step module.
+7. optimzie
+Contains a series of optimization functions. Requires scipy
 
 For more information use help. For example of usage see example.py script.

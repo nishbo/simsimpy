@@ -2,11 +2,12 @@
 
 neuron, synapse and node package included."""
 
-__all__ = ["neuron", "synapse", "node", "random", "other"]
+__all__ = ["neuron", "synapse", "node", "random", "other", "optimize"]
 
 import neuron
 import synapse
 import node
 import random
-from other import *
+import other
+import optimize
 from subset import SubsetStorage
