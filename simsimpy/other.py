@@ -1,3 +1,4 @@
+import os
 import sys
 import math
 import time
@@ -74,3 +75,27 @@ class Bounds(object):
             x = args[0]
         return (bool(numpy.all(x <= self.max)) and
                 bool(numpy.all(x >= self.min)))
+
+
+class Logger(object):
+    """Doubles output into a file
+
+    Usage:
+        sys.stdout = Logger()
+    Filename defaults to <pid>.log
+    """
+    def __init__(self, filename=None):
+        self.terminal = sys.stdout
+        if filename is None:
+            filename = str(os.getpid()) + '.log'
+        self.log = open(filename, 'a')
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+
+    def flush(self):
+        #this flush method is needed for python 3 compatibility.
+        #this handles the flush command by doing nothing.
+        #you might want to specify some extra behavior here.
+        pass
