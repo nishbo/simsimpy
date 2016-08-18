@@ -1,13 +1,8 @@
-"""Main module for SimSimPy package.
+"""Main module for SimSimPy package."""
 
-neuron, synapse and node package included."""
+__all__ = ["random", "other", "optimize"]
 
-__all__ = ["neuron", "synapse", "node", "random", "other", "optimize"]
-
-import neuron
-import synapse
-import node
-import random
-import other
-import optimize
-from subset import SubsetStorage
+from . import other
+from . import rand_wraps
+from . import optimize
+from .subset import SubsetStorage

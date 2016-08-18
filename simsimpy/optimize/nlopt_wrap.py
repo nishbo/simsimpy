@@ -26,9 +26,9 @@ def scipy_nlopt_cobyla(*args, **kwargs):
     opt = nlopt.opt(nlopt.LN_COBYLA, len(args[1]))
     opt.set_lower_bounds([i[0] for i in bounds])
     opt.set_upper_bounds([i[1] for i in bounds])
-    if 'ftol_rel' in kwargs.keys():
+    if 'ftol_rel' in list(kwargs.keys()):
         opt.set_ftol_rel(kwargs['ftol_rel'])
-    if 'xtol_rel' in kwargs.keys():
+    if 'xtol_rel' in list(kwargs.keys()):
         opt.set_ftol_rel(kwargs['xtol_rel'])
     opt.set_min_objective(args[0])
 
@@ -48,6 +48,6 @@ def scipy_nlopt_cobyla(*args, **kwargs):
     answ.success = True if opt.last_optimize_result() in [3, 4] else False
     answ.status = opt.last_optimize_result()
     if not answ.fun == opt.last_optimum_value():
-        print 'Something\'s wrong, ', answ.fun, opt.last_optimum_value()
+        print('Something\'s wrong, ', answ.fun, opt.last_optimum_value())
 
     return answ

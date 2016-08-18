@@ -21,7 +21,7 @@ class SubsetStorage(object):
     """
     def __init__(self, buf_size, input_size):
         self.buf_size = buf_size
-        self._dif = float(buf_size) / (input_size + 1)
+        self._dif = buf_size / (input_size + 1)
         self._i = 0
         self._j = 0
 
@@ -88,24 +88,24 @@ class SubsetStorage(object):
 def test():
     a = SubsetStorage(5, 13)
 
-    for i in xrange(13):
+    for i in range(13):
         a.append(i)
-        print i, len(a), a[-1], a
+        print(i, len(a), a[-1], a)
 
-    print a
+    print(a)
     a[2] = -11
-    print a[1:3], a
+    print(a[1:3], a)
     if -11 in a:
-        print '-11 is in a'
+        print('-11 is in a')
     if not 110 in a:
-        print 'but not 110'
+        print('but not 110')
 
-    print '\n', a
+    print('\n', a)
     del a[2]
-    print a
+    print(a)
     a.append(78)
-    print a
-    print a[:], a[-1]
+    print(a)
+    print(a[:], a[-1])
 
 
 if __name__ == '__main__':

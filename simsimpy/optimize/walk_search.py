@@ -1,5 +1,5 @@
 import numpy
-from simsimpy import other
+from ..other import dlogrange
 from scipy.optimize import OptimizeResult
 
 
@@ -31,7 +31,7 @@ def generate_nondiagonal_directions(length):
     Each vector has only one non-zero element, which eq to -1 or 1.
     """
     answ = []
-    for i in xrange(length):
+    for i in range(length):
         answ.append([0]*length)
         answ.append([0]*length)
 
@@ -137,7 +137,7 @@ def graduate_walk(target, x0, dx, directions, dx_start, dx_step, bounds=None,
     fnval = 0
     if dx_start < dx or dx_step >= 1 or dx < 0:
         raise Exception('dx, dx_start or dx_step were set incorrectly.')
-    dxs = list(other.dlogrange(dx_start, dx_step, stop=dx))
+    dxs = list(dlogrange(dx_start, dx_step, stop=dx))
     if dx not in dxs:
         dxs.append(dx)
     for ddx in dxs:
@@ -170,16 +170,16 @@ def scipy_walk(*args, **kwargs):
     """
     target = args[0]
     x0 = args[1]
-    dx = kwargs['dx'] if 'dx' in kwargs.keys() else 1e-8
-    if 'diagonal' in kwargs.keys() and kwargs['diagonal']:
+    dx = kwargs['dx'] if 'dx' in list(kwargs.keys()) else 1e-8
+    if 'diagonal' in list(kwargs.keys()) and kwargs['diagonal']:
         directions = generate_all_directions(len(x0))
     else:
         directions = generate_nondiagonal_directions(len(x0))
-    if 'bounds' in kwargs.keys() and kwargs['bounds'] is not None:
+    if 'bounds' in list(kwargs.keys()) and kwargs['bounds'] is not None:
         bounds = Bounds(kwargs['bounds'])
     else:
         bounds = None
-    ytol_rel = kwargs['ytol_rel'] if 'ytol_rel' in kwargs.keys() else 1e-8
+    ytol_rel = kwargs['ytol_rel'] if 'ytol_rel' in list(kwargs.keys()) else 1e-8
 
     res = walk(target, x0, dx, directions, bounds=bounds, ytol_rel=ytol_rel)
 
@@ -216,18 +216,18 @@ def scipy_graduate_walk(*args, **kwargs):
     """
     target = args[0]
     x0 = args[1]
-    dx = kwargs['dx'] if 'dx' in kwargs.keys() else 1e-8
-    dx_start = kwargs['dx_start'] if 'dx_start' in kwargs.keys() else 0.1
-    dx_step = kwargs['dx_step'] if 'dx_step' in kwargs.keys() else 0.1
-    if 'diagonal' in kwargs.keys() and kwargs['diagonal']:
+    dx = kwargs['dx'] if 'dx' in list(kwargs.keys()) else 1e-8
+    dx_start = kwargs['dx_start'] if 'dx_start' in list(kwargs.keys()) else 0.1
+    dx_step = kwargs['dx_step'] if 'dx_step' in list(kwargs.keys()) else 0.1
+    if 'diagonal' in list(kwargs.keys()) and kwargs['diagonal']:
         directions = generate_all_directions(len(x0))
     else:
         directions = generate_nondiagonal_directions(len(x0))
-    if 'bounds' in kwargs.keys() and kwargs['bounds'] is not None:
+    if 'bounds' in list(kwargs.keys()) and kwargs['bounds'] is not None:
         bounds = Bounds(kwargs['bounds'])
     else:
         bounds = None
-    ytol_rel = kwargs['ytol_rel'] if 'ytol_rel' in kwargs.keys() else 1e-8
+    ytol_rel = kwargs['ytol_rel'] if 'ytol_rel' in list(kwargs.keys()) else 1e-8
 
     res = graduate_walk(target, x0, dx, directions, dx_start, dx_step,
                         bounds=bounds, ytol_rel=ytol_rel)

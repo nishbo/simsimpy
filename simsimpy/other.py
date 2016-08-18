@@ -48,7 +48,7 @@ def dlogrange(start, step, steps=-1, stop=None):
         steps = abs(math.ceil(math.log(stop/start, step)))
     rnd = int(abs(math.log(sys.float_info.epsilon, 10.)))
 
-    for _ in xrange(int(steps)):
+    for _ in range(int(steps)):
         yield r
         r *= step
         r = round(r, rnd)
@@ -67,9 +67,9 @@ class Bounds(object):
         self.max = numpy.array([bound[1] for bound in bounds])
 
     def __call__(self, *args, **kwargs):
-        if 'x' in kwargs.keys():
+        if 'x' in list(kwargs.keys()):
             x = kwargs['x']
-        elif 'x_new' in kwargs.keys():
+        elif 'x_new' in list(kwargs.keys()):
             x = kwargs['x_new']
         else:
             x = args[0]
