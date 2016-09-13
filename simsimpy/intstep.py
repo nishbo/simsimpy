@@ -1,5 +1,6 @@
 def euler(prev, right_side, t, dt):
-    return prev + dt*right_side(t, *prev)
+    return [p + dt*r for p, r in zip(prev, right_side(t, *prev))]
+    # return prev + dt*right_side(t, *prev)
 
 
 def rk4(prev, right_side, t, dt):
@@ -8,8 +9,8 @@ def rk4(prev, right_side, t, dt):
         right side MUST return an array
     """
     k1 = right_side(t, *prev)
-    k2 = right_side(t+dt/2., *[prev[i]+k1[i]/2. for i in range(len(prev))])
-    k3 = right_side(t+dt/2., *[prev[i]+k2[i]/2. for i in range(len(prev))])
-    k4 = right_side(t+dt, *[prev[i]+k3[i] for i in range(len(prev))])
-    return [prev[i] + dt/6.*(k1[i]+2.*k2[i]+2.*k3[i]+k4[i])
-            for i in range(len(prev))]
+    k2 = right_side(t+dt/2, *[pi+dt*k1i/2 for pi, k1i in zip(prev, k1)])
+    k3 = right_side(t+dt/2, *[pi+dt*k2i/2 for pi, k2i in zip(prev, k2)])
+    k4 = right_side(t+dt, *[pi+dt*k3i for pi, k3i in zip(prev, k3)])
+    return [pi + dt/6*(k1i+2*k2i+2*k3i+k4i)
+            for pi, k1i, k2i, k3i, k4i in zip(prev, k1, k2, k3, k4)]
