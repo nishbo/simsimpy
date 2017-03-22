@@ -20,7 +20,7 @@ def brute(func, bounds, Ns, disp=False, *args, **kwargs):
     """
     [x, y] = _brute_rec(func, bounds, Ns, disp=disp)
     if disp:
-        print()
+        print
 
     return {'x0': x, 'fval': y}
 
@@ -36,12 +36,12 @@ def _brute_rec(func, bounds, Ns, x_l=None, disp=False, disp_s=''):
             xs.append(x_l + [p_r])
             ys.append(func(xs[-1]))
         if disp:
-            print(disp_s, end='\r')
+            print disp_s + '\r'
         return [xs[ys.index(min(ys))], min(ys)]
 
     for i, p_r in enumerate(numpy.linspace(bounds[0][0], bounds[0][1], Ns)):
         x, y = _brute_rec(func, bounds[1:], Ns, x_l=x_l+[p_r], disp=disp,
-                          disp_s=disp_s+'{:.2%} '.format(i/Ns))
+                          disp_s=disp_s+'{:.2%} '.format(float(i)/Ns))
         xs.append(x)
         ys.append(y)
     return [xs[ys.index(min(ys))], min(ys)]
@@ -73,8 +73,8 @@ def _test():
     params = (2, 3, 7, 8, 9, 10, 44, -1, 2, 26, 1, -2, 0.5)
     func = lambda point: _f(point, *params)
     bounds = [(-4, 4)]*2
-    print(brute(func, bounds=bounds, Ns=33))
-    print('Scipy calc: point: array([-1.0 1.75]), fval: -2.892')
+    print brute(func, bounds=bounds, Ns=33)
+    print 'Scipy calc: point: array([-1.0 1.75]), fval: -2.892'
 
 
 if __name__ == '__main__':
