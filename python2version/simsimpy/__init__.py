@@ -5,4 +5,4 @@ __all__ = ["random", "other", "optimize"]
 import other
 import rand_wraps
 import optimize
-import SubsetStorage
+from subset import SubsetStorage

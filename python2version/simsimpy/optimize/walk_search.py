@@ -1,5 +1,5 @@
 import numpy
-from simsimpy import dlogrange
+from ..other import dlogrange
 from scipy.optimize import OptimizeResult
 
 
